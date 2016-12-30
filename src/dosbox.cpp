@@ -47,6 +47,10 @@ Config * control;
 MachineType machine;
 SVGACards svgaCard;
 
+#if C_VMWARE_HGFS
+void VMWARE_HGFS_Init(Section *);
+#endif
+
 /* The whole load of startups for all the subfunctions */
 void MSG_Init(Section_prop *);
 void LOG_StartUp(void);
@@ -672,6 +676,14 @@ void DOSBOX_Init(void) {
 	secprop=control->AddSection_prop("ipx",&IPX_Init,true);
 	Pbool = secprop->Add_bool("ipx",Property::Changeable::WhenIdle, false);
 	Pbool->Set_help("Enable ipx over UDP/IP emulation.");
+#endif
+#if C_VMWARE_HGFS
+        secprop=control->AddSection_prop("vmware_hgfs",&VMWARE_HGFS_Init,true);
+        MSG_Add("VMWARE_HGFS_CONFIGFILE_HELP",
+                "dummy\n"
+        );
+        Pbool = secprop->Add_bool("vmware_hgfs", Property::Changeable::WhenIdle, true);
+        Pbool->Set_help("Enable VMware HGFS I/O");
 #endif
 //	secprop->AddInitFunction(&CREDITS_Init);
 
